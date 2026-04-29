@@ -1,0 +1,29 @@
+# Imagens temporárias
+imagens/*.jpg
+imagens/*.png
+imagens/*.gif
+imagens/*.webp
+imagens/temp/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+.env
+.env.local
+
+# Node (se usado)
+node_modules/
+package-lock.json
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+
+# Backups
+*.bak
+*~
