@@ -25,7 +25,7 @@
 
     /* Modo escuro */
     --dark-bg: #0f1419;            /* Fundo escuro */
-    --dark-card: #1a202c;          /* Card escuro */
+    --dark-card: #282e3a;          /* Card escuro */
     --dark-text: #f5f7fa;          /* Texto claro em modo escuro */
 
     /* Transições */
@@ -234,7 +234,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    /*background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);*/ 
+    background: url("../images/hero_bg.png") no-repeat fixed;
+    background-size: cover;
     color: var(--secondary-color);
     padding: 2rem;
     position: relative;
