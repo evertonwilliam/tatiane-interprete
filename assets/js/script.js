@@ -4,11 +4,12 @@
 // ===================================
 
 // Esperar o DOM estar pronto
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeMenuToggle();
     initializeThemeToggle();
     initializeScrollToTop();
     initializeFormSubmission();
+    initializeContactModal();
     initializeSmoothScroll();
 });
 
@@ -21,7 +22,7 @@ function initializeMenuToggle() {
     const navLinks = document.querySelectorAll('.nav-link');
 
     if (menuToggle) {
-        menuToggle.addEventListener('click', function() {
+        menuToggle.addEventListener('click', function () {
             navMenu.classList.toggle('active');
             const icon = menuToggle.querySelector('i');
             if (navMenu.classList.contains('active')) {
@@ -35,7 +36,7 @@ function initializeMenuToggle() {
 
         // Fechar menu ao clicar em um link
         navLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 navMenu.classList.remove('active');
                 const icon = menuToggle.querySelector('i');
                 icon.classList.add('fa-bars');
@@ -44,7 +45,7 @@ function initializeMenuToggle() {
         });
 
         // Fechar menu ao clicar fora
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             const isClickInsideNav = navMenu.contains(event.target);
             const isClickOnToggle = menuToggle.contains(event.target);
 
@@ -79,7 +80,7 @@ function initializeThemeToggle() {
     }
     */
     if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
+        themeToggle.addEventListener('click', function () {
             const currentTheme = body.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
@@ -117,7 +118,7 @@ function initializeScrollToTop() {
             }
         });
 
-        scrollToTopBtn.addEventListener('click', function() {
+        scrollToTopBtn.addEventListener('click', function () {
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
@@ -159,7 +160,7 @@ function initializeSmoothScroll() {
     });
 
     // Atualizar link ativo ao scrollar
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-link');
 
@@ -195,43 +196,178 @@ function updateActiveLink(href) {
 // ===================================
 function initializeFormSubmission() {
     const contactForm = document.getElementById('contact-form');
+    const telefoneInput = document.getElementById('telefone');
+
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function () {
+            telefoneInput.value = formatPhoneNumber(telefoneInput.value);
+        });
+    }
 
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const telefone = document.getElementById('telefone').value;
-            const assunto = document.getElementById('assunto').value;
-            const mensagem = document.getElementById('mensagem').value;
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const assunto = document.getElementById('assunto').value.trim();
+            const mensagem = document.getElementById('mensagem').value.trim();
 
             // Validação básica
             if (!nome || !email || !assunto || !mensagem) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
+                showContactModal('error', 'Campos obrigatorios', 'Por favor, preencha todos os campos obrigatorios.');
                 return;
             }
 
-            // Criar corpo do email
-            const emailBody = encodeURIComponent(
-                `Nome: ${nome}\n` +
-                `Email: ${email}\n` +
-                `Telefone: ${telefone}\n` +
-                `Assunto: ${assunto}\n\n` +
-                `Mensagem:\n${mensagem}`
-            );
+            if (!isValidEmail(email)) {
+                showContactModal('error', 'Email invalido', 'Informe um email valido para contato.');
+                return;
+            }
 
-            // Redirecionar para mailto
-            const mailtoLink = `mailto:tatiane.leao@gmail.com?subject=${encodeURIComponent(assunto)}&body=${emailBody}`;
-            window.location.href = mailtoLink;
+            if (telefone && telefone.replace(/\D/g, '').length !== 11) {
+                showContactModal('error', 'Telefone invalido', 'Informe o telefone no formato (xx) x xxxx-xxxx.');
+                return;
+            }
 
-            // Mostrar mensagem de sucesso
-            showSuccessMessage();
+            // Enviar dados para contato.php
+            // O retorno sera exibido no pop-up
+            // Evitar duplo envio
 
-            // Limpar formulário
-            contactForm.reset();
+            const submitButton = contactForm.querySelector('.submit-button');
+            const originalButtonText = submitButton ? submitButton.textContent : '';
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Enviando...';
+            }
+
+            try {
+                const response = await fetch(contactForm.action, {
+                    method: 'POST',
+                    body: new FormData(contactForm),
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showContactModal('success', 'Mensagem enviada', result.message);
+                    contactForm.reset();
+                } else {
+                    showContactModal('error', 'Erro no envio', result.message);
+                }
+            } catch (error) {
+                showContactModal('error', 'Erro no envio', 'Nao foi possivel enviar a mensagem. Tente novamente em instantes.');
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = originalButtonText;
+                }
+            }
         });
+        showContactStatusMessage();
     }
+}
+
+function formatPhoneNumber(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+
+    if (digits.length <= 2) {
+        return digits.length ? `(${digits}` : '';
+    }
+
+    if (digits.length <= 3) {
+        return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+    }
+
+    if (digits.length <= 7) {
+        return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3)}`;
+    }
+
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 3)} ${digits.slice(3, 7)}-${digits.slice(7)}`;
+}
+
+function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function showContactStatusMessage() {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('contato');
+
+    if (!status) {
+        return;
+    }
+
+    const messages = {
+        enviado: {
+            type: 'success',
+            text: 'Mensagem enviada com sucesso! Em breve entraremos em contato.'
+        },
+        limite: {
+            type: 'error',
+            text: 'Mensagem ja enviada recentemente. Aguarde antes de tentar novamente.'
+        },
+        metodo: {
+            type: 'error',
+            text: 'Nao foi possivel enviar a mensagem por este metodo.'
+        },
+        erro: {
+            type: 'error',
+            text: 'Nao foi possivel enviar a mensagem. Confira os dados e tente novamente.'
+        }
+    };
+
+    const message = messages[status] || messages.erro;
+    showContactModal(message.type, message.type === 'success' ? 'Mensagem enviada' : 'Erro no envio', message.text);
+}
+
+function showContactModal(type, title, message) {
+    const modal = document.getElementById('contact-modal');
+    const modalTitle = document.getElementById('contact-modal-title');
+    const modalMessage = document.getElementById('contact-modal-message');
+    const modalIcon = document.getElementById('contact-modal-icon');
+
+    if (!modal || !modalTitle || !modalMessage || !modalIcon) {
+        return;
+    }
+
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modalIcon.classList.toggle('error', type !== 'success');
+    modalIcon.innerHTML = type === 'success' ? '<i class="fas fa-check"></i>' : '<i class="fas fa-exclamation"></i>';
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+
+    const closeButton = modal.querySelector('.contact-modal__close');
+    if (closeButton) {
+        closeButton.focus();
+    }
+}
+
+function closeContactModal() {
+    const modal = document.getElementById('contact-modal');
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+}
+
+function initializeContactModal() {
+    document.querySelectorAll('[data-contact-modal-close]').forEach(element => {
+        element.addEventListener('click', closeContactModal);
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeContactModal();
+        }
+    });
 }
 
 function showSuccessMessage() {
@@ -300,4 +436,4 @@ function sendWhatsApp() {
 
 // Log de carregamento
 console.log('✓ Site Tatiane Leão carregado com sucesso!');
-console.log('Modo acessível ativado.');
+console.log('✓ Modo acessível ativado.');
