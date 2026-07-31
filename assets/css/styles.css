@@ -6,27 +6,42 @@
 /* Variáveis CSS */
 :root {
     /* Cores primárias (Libras + Acessibilidade) */
-    --primary-color: #0066cc;      /* Azul profundo (Libras) */
-    --primary-light: #4d94ff;      /* Azul claro */
-    --primary-pale: #e6f0ff;       /* Azul pálido */
+    --primary-color: #0066cc;
+    /* Azul profundo (Libras) */
+    --primary-light: #4d94ff;
+    /* Azul claro */
+    --primary-pale: #e6f0ff;
+    /* Azul pálido */
 
     /* Cores secundárias */
-    --secondary-color: #ffffff;    /* Branco */
-    --accent-color: #00b8e6;       /* Azul-ciano (inclusão) */
-    --accent-light: #e6f7ff;       /* Ciano pálido */
+    --secondary-color: #ffffff;
+    /* Branco */
+    --accent-color: #00b8e6;
+    /* Azul-ciano (inclusão) */
+    --accent-light: #e6f7ff;
+    /* Ciano pálido */
 
     /* Neutros e textos */
-    --text-primary: #1a1a1a;       /* Texto escuro */
-    --text-secondary: #555555;     /* Texto cinza */
-    --text-light: #888888;         /* Texto claro */
-    --bg-light: #f5f7fa;           /* Fundo claro */
-    --bg-white: #ffffff;           /* Branco puro */
-    --border-color: #e0e0e0;       /* Borda */
+    --text-primary: #1a1a1a;
+    /* Texto escuro */
+    --text-secondary: #555555;
+    /* Texto cinza */
+    --text-light: #888888;
+    /* Texto claro */
+    --bg-light: #f5f7fa;
+    /* Fundo claro */
+    --bg-white: #ffffff;
+    /* Branco puro */
+    --border-color: #e0e0e0;
+    /* Borda */
 
     /* Modo escuro */
-    --dark-bg: #0f1419;            /* Fundo escuro */
-    --dark-card: #282e3a;          /* Card escuro */
-    --dark-text: #f5f7fa;          /* Texto claro em modo escuro */
+    --dark-bg: #0f1419;
+    /* Fundo escuro */
+    --dark-card: #282e3a;
+    /* Card escuro */
+    --dark-text: #f5f7fa;
+    /* Texto claro em modo escuro */
 
     /* Transições */
     --transition-fast: 0.2s ease;
@@ -109,9 +124,19 @@ body {
 }
 
 @keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(15deg); }
-    75% { transform: rotate(-15deg); }
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(15deg);
+    }
+
+    75% {
+        transform: rotate(-15deg);
+    }
 }
 
 .logo h1 {
@@ -227,14 +252,14 @@ body {
 /* ===================================
    Hero Section
    =================================== */
-
+/*
 .hero {
     margin-top: 60px;
     min-height: calc(100vh - 60px);
     display: flex;
     align-items: center;
     justify-content: center;
-    /*background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);*/ 
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
     background: url("../images/hero_bg.png") no-repeat fixed;
     background-size: cover;
     color: var(--secondary-color);
@@ -253,11 +278,54 @@ body {
     background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
     border-radius: 50%;
     animation: float 6s ease-in-out infinite;
+}*/
+.hero {
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(
+        135deg,
+        var(--primary-color) 0%,
+        var(--accent-color) 100%
+    );
+    color: var(--secondary-color);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ondas */
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../images/waves.svg") repeat-x;
+    background-size: 120% auto;
+    opacity: 0.12;
+    animation: waveMove 15s reverse infinite;
+}
+
+@keyframes waveMove {
+    from {
+        background-position-x: 0;
+    }
+    to {
+        background-position-x: 1200px;
+    }
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(30px); }
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(30px);
+    }
 }
 
 .hero-content {
@@ -350,6 +418,7 @@ body {
         opacity: 0;
         transform: translateX(-50px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -361,6 +430,7 @@ body {
         opacity: 0;
         transform: translateX(50px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -641,7 +711,8 @@ body {
 .video-wrapper {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* Proporção 16:9 */
+    padding-bottom: 56.25%;
+    /* Proporção 16:9 */
     height: 0;
     overflow: hidden;
     border-radius: 12px 12px 0 0;
@@ -1134,6 +1205,360 @@ body {
     }
 }
 
+
+
+
+
+/* ===================================
+   Nova Seção: Cursos & Vantagens
+   =================================== */
+
+.cursos-header {
+    display: table;
+    width: 100%;
+    margin-bottom: 3.5rem;
+}
+
+.cursos-header .header-left {
+    display: table-cell;
+    width: 45%;
+    vertical-align: middle;
+}
+
+.cursos-header .header-right {
+    display: table-cell;
+    width: 55%;
+    vertical-align: middle;
+    padding-left: 2rem;
+}
+
+.cursos-badge {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.cursos-main-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    line-height: 1.1;
+}
+
+.cursos-intro-text {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Layout em Grid Lateral */
+.cursos-grid-layout {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.curso-purchase-card {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    background-color: var(--bg-white);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.curso-purchase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Modo escuro customizado para o card de curso igual ao print */
+[data-theme="dark"] .curso-purchase-card {
+    background-color: #151b26;
+    border-color: #222d3d;
+}
+
+/* Lado da lista de vantagens */
+.curso-advantages-list {
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+    padding-left: 3rem;
+}
+
+/* Imagem e Placeholders */
+.curso-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%px;
+    background-color: #1b2230;
+    /* Fundo escuro igual ao print para contraste */
+    display: block;
+}
+
+.badge-novo {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #7928ca;
+    color: #fff;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.curso-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #4a5568;
+    text-align: center;
+}
+
+.curso-image-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+    color: #3f4e66;
+}
+
+.curso-image-placeholder p {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+/* Informações do card */
+.curso-details-content {
+    padding: 2rem;
+}
+
+.curso-category-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.curso-title-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.curso-description-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Preço */
+.curso-price-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.price-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+}
+
+.price-condition {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Botões da Plataforma */
+.curso-buttons-group {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 12px 0;
+    margin-left: -12px;
+    width: calc(100% + 24px);
+}
+
+.btn-platform {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    height: 48px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #fff;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-platform:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.btn-udemy {
+    background-color: #a435f0;
+}
+
+.btn-hotmart {
+    background-color: #ff5a00;
+}
+
+/* Cards de Vantagens (Lado Direito) */
+.advantage-item {
+    background-color: var(--bg-white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    display: table;
+    width: 100%;
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.advantage-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary-light);
+}
+
+[data-theme="dark"] .advantage-item {
+    background-color: var(--dark-card);
+    border-color: #2c3e50;
+}
+
+.advantage-icon-box {
+    display: table-cell;
+    width: 50px;
+    vertical-align: middle;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .advantage-icon-box {
+    color: var(--primary-light);
+}
+
+.advantage-text-box {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 0.5rem;
+}
+
+.advantage-subtitle {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-light);
+    display: block;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.advantage-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.curso-card-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===================================
+   Responsividade para a Seção Cursos
+   =================================== */
+
+@media (max-width: 992px) {
+
+    .cursos-header .header-left,
+    .cursos-header .header-right,
+    .curso-purchase-card,
+    .curso-advantages-list {
+        display: block;
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .cursos-header .header-right {
+        margin-top: 1rem;
+    }
+
+    .curso-advantages-list {
+        margin-top: 2.5rem;
+    }
+
+    .btn-platform {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .curso-buttons-group,
+    .btn-platform {
+        display: block;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .btn-platform {
+        text-align: center;
+        margin: 5px;
+    }
+
+    .cursos-main-title {
+        font-size: 2.2rem;
+    }
+
+    .btn-platform i {
+        margin-right: 8px;
+    }
+
+    .price-value,
+    .price-condition {
+        width: 50%;
+    }
+
+    .btn-platform {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+}
+
+
+
 /* ===================================
    Footer
    =================================== */
@@ -1276,6 +1701,7 @@ body {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1344,6 +1770,7 @@ body {
 
 /* Impressão */
 @media print {
+
     .header-fixed,
     .scroll-to-top,
     .contact-form {
