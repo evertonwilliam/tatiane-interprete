@@ -252,7 +252,7 @@ body {
 /* ===================================
    Hero Section
    =================================== */
-/*
+
 .hero {
     margin-top: 60px;
     min-height: calc(100vh - 60px);
@@ -296,7 +296,7 @@ body {
     overflow: hidden;
 }
 
-/* Ondas */
+/* Ondas 
 .hero::after {
     content: "";
     position: absolute;
@@ -327,7 +327,7 @@ body {
         transform: translateY(30px);
     }
 }
-
+*/
 .hero-content {
     display: flex;
     align-items: center;
